@@ -152,6 +152,7 @@ export default class Weather extends Component {
   
 
   componentDidMount(){
+    console.log(this.state.city);
     return fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${this.state.city}&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1`)
       .then((response) => response.json())
       .then((responseJson) => {
