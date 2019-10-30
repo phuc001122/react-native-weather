@@ -5,11 +5,9 @@ const styles = StyleSheet.create({
     },
     slide1: {
       flex: 1,
-      backgroundColor: '#9DD6EB'
     },
     slide2: {
       flex: 1,
-      backgroundColor: '#9DD6EB',
     },
   
   
@@ -33,7 +31,8 @@ const styles = StyleSheet.create({
       width: '90%',
       alignSelf: "baseline",
       backgroundColor: 'rgba(52, 52, 52, 0.4)',
-      marginVertical: 10
+      marginVertical: 10,
+      borderRadius: 10
     },
     
     temp_now:
@@ -92,6 +91,7 @@ const styles = StyleSheet.create({
       width: '90%',
       backgroundColor: 'rgba(52, 52, 52, 0.4)',
       marginVertical: 10,
+      borderRadius: 10
     },
     
   
@@ -113,8 +113,9 @@ const styles = StyleSheet.create({
     {
       color: 'white',
       height: 25,
-      marginStart: '20%',
-      marginEnd: 10
+      marginStart: '25%',
+      marginEnd: 10,
+      alignItems: "stretch"
     },
   
     detail_row:
@@ -129,7 +130,6 @@ const styles = StyleSheet.create({
 
 
 
-    
     //forecast
     flatListItem: {
       color: 'white',
