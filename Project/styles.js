@@ -9,11 +9,24 @@ const styles = StyleSheet.create({
     slide2: {
       flex: 1,
     },
-  
+    
+    head:
+    {
+      flexDirection: "row",
+      width: '100%'
+    },
+
+    button:
+    {
+      width: 20,
+      height: 20,
+      marginVertical:30,
+      marginHorizontal: 10
+    },
   
     input:
     {
-      width: '90%',
+      width: '80%',
       marginLeft: 15,
       color: 'white',
       backgroundColor: 'rgba(52, 52, 52, 0.4)',
@@ -140,7 +153,7 @@ const styles = StyleSheet.create({
     flatList:{
       flex: 1,
       flexDirection: "row",
-      backgroundColor: 'mediumseagreen'
+      backgroundColor: 'rgba(52, 52, 52, 0.4)'
     },
     
     image:{
@@ -151,7 +164,7 @@ const styles = StyleSheet.create({
     thanhpho:{
       padding: 10,
       fontSize: 16,
-      backgroundColor: "tomato",
+      backgroundColor: "gray",
       color: "white",
     },
   })
