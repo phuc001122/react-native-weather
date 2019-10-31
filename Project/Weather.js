@@ -6,26 +6,68 @@ import {
   Image,
   ActivityIndicator,
   ImageBackground,
-  Alert,
-  TouchableOpacity
+  Button,
+  TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 import styles from './styles';
-import Swiper from 'react-native-swiper'
-import Forecast from './Forecast';
-import ForecastInfo from './ForecastInfo';
 import { ScrollView } from 'react-native-gesture-handler';
+import Dialog from "react-native-dialog";
 
 export default class App extends Component {
   constructor(props){
     super(props);
     this.state ={ 
       isLoading: true,
-      city: 'Thu Duc',
+      city: 'Thành phố Hồ Chí Minh',
+      dialogVisible: false,
+      savedCity: "",
     }
   }
+ 
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem('savedCity', this.state.savedCity);
+    } catch (error) {
+      // Error saving data
+    }
+    this.setState({ dialogVisible: false });
+  };
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('savedCity');
+      if (value !== null) {
+        this.setState({city: value});
+        console.log(value);
+      }else{
+        this.setState({city: 'Thành phố Hồ Chí Minh'});
+      }
+    } catch (error) {
+      this.setState({city: 'Thành phố Hồ Chí Minh'});
+    }finally{
+      this.getWeather();
+    }
+  };
+
+  _removeItem = async () => {
+    try {
+      await AsyncStorage.removeItem('savedCity');
+    } catch (error) {
+      // Error remove data
+    }
+  };
+
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+ 
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
 
   getWeather(){
-    return fetch('http://api.openweathermap.org/data/2.5/weather?q='+ this.state.city +'&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1')
+    return fetch('http://api.openweathermap.org/data/2.5/weather?q='+ this.state.city +'&lang=vi&units=metric&APPID=dc5595c47749d00d1dfc9743773820da')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -38,17 +80,15 @@ export default class App extends Component {
 
       })
       .catch((error) =>{
-        console.error(error);
+        if(this.state.dataSource.message === "city not found"){
+          this._removeItem();
+          this.setState(({city: "Thành phố Hồ Chí Minh"}));
+        }
       });
   }
 
   componentDidMount(){
-    this.getWeather();
-  }
-  
-  gethello()
-  {
-    console.log(`ahii`);
+    this._retrieveData();
   }
 
   render(){
@@ -62,8 +102,19 @@ export default class App extends Component {
       )
     }
 
+    var image = "";
+    if(weather.weather[0].icon === "01d" || weather.weather[0].icon === "02d" || weather.weather[0].icon === "03d" || weather.weather[0].icon === "04d"){
+      image = require('./img/day.jpg');
+    } else if(weather.weather[0].icon === "09d" || weather.weather[0].icon === "10d" || weather.weather[0].icon === "11d"){
+      image = require('./img/dayrain.jpg');
+    }else if(weather.weather[0].icon === "01n" || weather.weather[0].icon === "02n" || weather.weather[0].icon === "03n" || weather.weather[0].icon === "04n"){
+      image = require('./img/night.jpg');
+    }else if( weather.weather[0].icon === "09n" || weather.weather[0].icon === "10n" || weather.weather[0].icon === "11n"){
+      image = require('./img/nightrain.jpg');
+    }
+    const {navigate} = this.props.navigation;
     return (
-      <ImageBackground source={require('./img/day.jpg')} style={{width: '100%', height: '100%'}}>
+      <ImageBackground source={image} style={{width: '100%', height: '100%'}}>
         <ScrollView>
           <View style={styles.slide1}>
           <View style={styles.head}>
@@ -81,7 +132,7 @@ export default class App extends Component {
           }}
           >{weather.name}</TextInput>
 
-            <TouchableOpacity onPress={()=>this.gethello()}>
+            <TouchableOpacity onPress={()=>this.showDialog()}>
               <Image source={require('./img/checked.png')} style={styles.button}></Image>
             </TouchableOpacity>
 
@@ -139,6 +190,22 @@ export default class App extends Component {
               </View>
             </View>
           </View>
+          <Button
+            title="Các ngày tiếp theo"
+            onPress={() => navigate('Forecast', {city: this.state.city, icon: weather.weather[0].icon})}
+          />
+          <Dialog.Container visible={this.state.dialogVisible}>
+            <Dialog.Title>Lưu thành phố</Dialog.Title>
+            <Dialog.Input 
+              label="Nhập tên thành phố:"
+              onChangeText={savedCity => this.setState({savedCity})}
+              value={this.state.savedCity}
+              >
+
+              </Dialog.Input>
+            <Dialog.Button label="Lưu" onPress={this._storeData} />
+            <Dialog.Button label="Hủy" onPress={this.handleCancel} />
+          </Dialog.Container>
         </ScrollView>
       </ImageBackground>
         

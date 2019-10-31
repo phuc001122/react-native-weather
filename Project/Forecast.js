@@ -14,7 +14,7 @@ export default class Forecast extends Component {
 	  }
 	
 	getWeather(){
-		return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1')
+		return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=dc5595c47749d00d1dfc9743773820da')
 		  .then((response) => response.json())
 		  .then((responseJson) => {
 	
@@ -44,8 +44,19 @@ export default class Forecast extends Component {
 			  </View>
 			)
 		  }
+
+		var image = "";
+		if(this.props.navigation.getParam('icon') === "01d" || this.props.navigation.getParam('icon') === "02d" || this.props.navigation.getParam('icon') === "03d" || this.props.navigation.getParam('icon') === "04d"){
+			image = require('./img/day.jpg');
+		} else if(this.props.navigation.getParam('icon') === "09d" || this.props.navigation.getParam('icon') === "10d" || this.props.navigation.getParam('icon') === "11d"){
+			image = require('./img/dayrain.jpg');
+		}else if(this.props.navigation.getParam('icon') === "01n" || this.props.navigation.getParam('icon') === "02n" || this.props.navigation.getParam('icon') === "03n" || this.props.navigation.getParam('icon') === "04n"){
+			image = require('./img/night.jpg');
+		}else if( this.props.navigation.getParam('icon') === "09n" || this.props.navigation.getParam('icon') === "10n" || this.props.navigation.getParam('icon') === "11n"){
+			image = require('./img/nightrain.jpg');
+		}
 		return (
-			<ImageBackground source={require('./img/day.jpg')} style={{width: '100%', height: '100%'}}>
+			<ImageBackground source={image} style={{width: '100%', height: '100%'}}>
       	<FlatList 
 			data={this.state.dataSource.list} 
 			style={{marginTop:20}} 
@@ -84,7 +95,7 @@ const styles = StyleSheet.create({
 	card:{
 		backgroundColor:'rgba(56, 172, 236, 1)',
 		borderWidth:0,
-		borderRadius:0,
+		borderRadius:3,
 	},
 	time:{
 		fontSize:30,

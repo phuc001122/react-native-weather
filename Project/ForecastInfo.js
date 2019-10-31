@@ -8,134 +8,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import moment from 'moment';
-
-const styles = StyleSheet.create({
-  wrapper: {
-  },
-  slide1: {
-    flex: 1,
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    backgroundColor: '#9DD6EB',
-  },
-
-
-  input:
-  {
-    width: '90%',
-    marginLeft: 15,
-    color: 'white',
-    backgroundColor: 'rgba(52, 52, 52, 0.4)',
-    alignSelf: 'baseline',
-    borderRadius: 30,
-    paddingLeft: 20,
-    marginVertical: 15,
-  },
-
-  info_basic_today:
-  {
-    paddingLeft: 20,
-    marginLeft: 15,
-    paddingRight: 20,
-    width: '90%',
-    alignSelf: "baseline",
-    backgroundColor: 'rgba(52, 52, 52, 0.4)',
-    marginVertical: 10
-  },
-  
-  temp_now:
-  {
-    color: 'white',
-    fontSize: 60,
-    paddingRight: 50
-  },
-
-  icon_temp_now:
-  {
-    width: 100,
-    height: 90,
-    flexDirection: "row-reverse",
-    
-  },
-
-  rowbasic_1:
-  {
-    marginVertical: 10,
-    flexDirection: "row"
-  },
-
-  rowbasic_2:
-  {
-    flexDirection: "row",
-    marginVertical: 15
-  },
-
-  temp_low_high:
-  {
-    color: 'white',
-    flexDirection: "row-reverse",
-  },
-
-  info_temp:
-  {
-    color: 'white'
-  },
-
-  rowbasic_2_1:
-  {
-    flexDirection: "row",
-    marginStart: 100,
-    marginEnd: 20
-  },
- 
-
-
-  info_detail_today:
-  {
-    paddingHorizontal: 20,
-    marginLeft: 15,
-    paddingRight: 20,
-    width: '90%',
-    backgroundColor: 'rgba(52, 52, 52, 0.4)',
-    marginVertical: 10,
-  },
-  
-
-  icon_weather:
-  {
-    width: 27,
-    height: 27,
-  },
-
-  detail_title:
-  {
-    color: 'white',
-    height: 25,
-    width: 100,
-    paddingLeft: 15
-  },
-
-  detail_number:
-  {
-    color: 'white',
-    height: 25,
-    marginStart: '35%',
-    marginEnd: 10
-  },
-
-  detail_row:
-  {
-    flexDirection: "row",
-    marginTop: 23,
-    borderBottomWidth: 1,
-    borderBottomColor: '#cecdcd69',
-    paddingBottom: 10
-  }
-
-})
-
+import styles from './styles';
 
 export default class Weather extends Component {
   constructor(props){
@@ -149,7 +22,7 @@ export default class Weather extends Component {
   
 
   componentDidMount(){
-    return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1')
+    return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=dc5595c47749d00d1dfc9743773820da')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -175,10 +48,20 @@ export default class Weather extends Component {
       )
     }
     const weather = this.state.dataSource;
+    var image;
     for(let i = 0; i < weather.length; i++){
       if(this.props.navigation.getParam('key') === weather[i].dt_txt){
+        if(weather[i].weather[0].icon === "01d" || weather[i].weather[0].icon === "02d" || weather[i].weather[0].icon === "03d" || weather[i].weather[0].icon === "04d"){
+          image = require('./img/day.jpg');
+        } else if(weather[i].weather[0].icon === "09d" || weather[i].weather[0].icon === "10d" || weather[i].weather[0].icon === "11d"){
+          image = require('./img/dayrain.jpg');
+        }else if(weather[i].weather[0].icon === "01n" || weather[i].weather[0].icon === "02n" || weather[i].weather[0].icon === "03n" || weather[i].weather[0].icon === "04n"){
+          image = require('./img/night.jpg');
+        }else if( weather[i].weather[0].icon === "09n" || weather[i].weather[0].icon === "10n" || weather[i].weather[0].icon === "11n"){
+          image = require('./img/nightrain.jpg');
+        }
         return (
-            <ImageBackground source={require('./img/night.jpg')} style={{width: '100%', height: '100%'}}>
+            <ImageBackground source={image} style={{width: '100%', height: '100%'}}>
             <View style={styles.info_basic_today}>
   
               <View style={styles.rowbasic_1}>
@@ -187,7 +70,7 @@ export default class Weather extends Component {
               </View>
               <View style={styles.rowbasic_2}>
                 <Text style={styles.info_temp}>Ngày giờ</Text>
-                <Text style={styles.detail_number}>{moment(weather[i].dt*1000).format('HH:mm DD/MM/YYYY')}</Text>
+                <Text style={styles.info_temp}>{moment(weather[i].dt*1000).format('HH:mm DD/MM/YYYY')}</Text>
               </View>
               <View style={styles.rowbasic_2}>
                 <Text style={styles.info_temp}>{weather[i].weather[0].description}</Text>
