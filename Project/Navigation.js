@@ -1,11 +1,18 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import Forecast from './Forecast';
 import Weather from './Weather';
+import Forecast from './Forecast';
+import ForecastInfo from './ForecastInfo';
 
 const MainNavigator = createStackNavigator({
-  Forcast: {screen: Forecast},
-  Weather: {screen: Weather},
+  Weather: {
+    screen: Weather,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  Forecast: {screen: Forecast,},
+  Info: {screen: ForecastInfo},
 });
 
 const App = createAppContainer(MainNavigator);

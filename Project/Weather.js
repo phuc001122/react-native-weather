@@ -5,9 +5,10 @@ import {
   TextInput, 
   Image,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  ScrollView,
+  Button
 } from 'react-native';
- 
 import styles from './styles';
 
 export default class App extends Component {
@@ -43,6 +44,7 @@ export default class App extends Component {
 
   render(){
     const weather = this.state.dataSource;
+    const {navigate} = this.props.navigation;
     
     if(this.state.isLoading){
       return(
@@ -54,6 +56,7 @@ export default class App extends Component {
 
     return (
       <ImageBackground source={require('./img/day.jpg')} style={{width: '100%', height: '100%'}}>
+      <ScrollView>
       <View style={styles.slide1}>
       <TextInput 
         placeholder={'Nhập thành phố...'} 
@@ -119,7 +122,12 @@ export default class App extends Component {
           <Text style={styles.detail_number}>{weather.wind.speed + " m/s"}</Text>
         </View>
       </View>
+      <Button
+        title="Các ngày tiếp theo"
+        onPress={() => navigate('Forecast', {city: this.state.city})}
+      />
       </View>
+      </ScrollView>
       </ImageBackground>
         
     );

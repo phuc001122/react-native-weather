@@ -5,12 +5,9 @@ import {
   View,
   Image,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
-
-import moment from 'moment'
-import Swiper from 'react-native-swiper';
-
-
+import moment from 'moment';
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -152,7 +149,7 @@ export default class Weather extends Component {
   
 
   componentDidMount(){
-    return fetch(`http://api.openweathermap.org/data/2.5/forecast?q=${this.state.city}&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1`)
+    return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1')
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -181,16 +178,16 @@ export default class Weather extends Component {
     for(let i = 0; i < weather.length; i++){
       if(this.props.navigation.getParam('key') === weather[i].dt_txt){
         return (
-            <View style={styles.slide1}>
+            <ImageBackground source={require('./img/night.jpg')} style={{width: '100%', height: '100%'}}>
             <View style={styles.info_basic_today}>
   
               <View style={styles.rowbasic_1}>
                 <Text style={styles.temp_now}>{parseInt(weather[i].main.temp, 10)}°C</Text>
                 <Image source={{uri: "http://openweathermap.org/img/wn/"+ weather[i].weather[0].icon + "@2x.png"}} style={styles.icon_temp_now}></Image>
               </View>
-              <View style={styles.rowbasic_1}>
-                <Text style={styles.detail_title}>Ngày giờ</Text>
-                <Text style={styles.detail_number}>{weather[i].dt_txt}</Text>
+              <View style={styles.rowbasic_2}>
+                <Text style={styles.info_temp}>Ngày giờ</Text>
+                <Text style={styles.detail_number}>{moment(weather[i].dt*1000).format('HH:mm DD/MM/YYYY')}</Text>
               </View>
               <View style={styles.rowbasic_2}>
                 <Text style={styles.info_temp}>{weather[i].weather[0].description}</Text>
@@ -230,7 +227,7 @@ export default class Weather extends Component {
                 <Text style={styles.detail_number}>{weather[i].wind.speed}m/s</Text>
               </View>
             </View>
-            </View>  
+            </ImageBackground>
         )
       }
     }

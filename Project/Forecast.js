@@ -1,132 +1,98 @@
-//import thu vien
-import React, {Component} from "react";
-import{
-  View, Text, FlatList, StyleSheet, Image, ActivityIndicator, TextInput, TouchableOpacity 
-} from "react-native";
-//Khai bao class
-export default class Forecast extends Component{
-  constructor(props){
-    super(props);
-    this.state ={ 
-      isLoading: true,
-      city: 'Thành phố Hồ Chí Minh',
-    }
-  }
+import React, {Component} from 'react';
+import { FlatList, StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, ImageBackground } from 'react-native';
+import { Text, Card, Divider } from 'react-native-elements';
+import moment from 'moment';
 
-  getForecast(){
-    return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1')
-      .then((response) => response.json())
-      .then((responseJson) => {
+export default class Forecast extends Component {
 
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function(){
+	constructor(props){
+		super(props);
+		this.state ={ 
+		  isLoading: true,
+		  city: this.props.navigation.getParam('city'),
+		}
+	  }
+	
+	getWeather(){
+		return fetch('http://api.openweathermap.org/data/2.5/forecast?q='+ this.state.city +'&lang=vi&units=metric&APPID=b5177eb82d0e5d0cbdbbf5a5d2cd19b1')
+		  .then((response) => response.json())
+		  .then((responseJson) => {
+	
+			this.setState({
+			  isLoading: false,
+			  dataSource: responseJson,
+			}, function(){
+	
+			});
+	
+		  })
+		  .catch((error) =>{
+			console.error(error);
+		  });
+	  }
+	
+	  componentDidMount(){
+		this.getWeather();
+	  }
 
-        });
+	render() {
+		const {navigate} = this.props.navigation;
+		if(this.state.isLoading){
+			return(
+			  <View style={{flex: 1, padding: 20}}>
+				<ActivityIndicator/>
+			  </View>
+			)
+		  }
+		return (
+			<ImageBackground source={require('./img/day.jpg')} style={{width: '100%', height: '100%'}}>
+      	<FlatList 
+			data={this.state.dataSource.list} 
+			style={{marginTop:20}} 
+			keyExtractor={item => item.dt_txt} 
+			renderItem={({item}) => {
+				return(
+					<TouchableOpacity onPress={() => navigate('Info', {key: item.dt_txt, city: this.state.city})}>
+						<Card containerStyle={styles.card}>
+							<Text style={styles.notes}>{this.state.dataSource.city.name}</Text>
+							
+							<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+								<Image style={{width:100, height:100}} source={{uri:"https://openweathermap.org/img/wn/" + item.weather[0].icon + "@2x.png"}} />
+								<View style={{flexDirection:'column', justifyContent:'space-between', alignItems:'center'}}>
+									<Text style={styles.time}>{moment(item.dt*1000).format('HH:mm')}</Text>
+									<Text style={styles.time}>{moment(item.dt*1000).format('DD/MM/YYYY')}</Text>
+								</View>
+								
+							</View>
 
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-  }
-
-  componentDidMount(){
-    this.getForecast();
-  }
-
-  render(){
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
-    const {navigate} = this.props.navigation;
-    return(
-      <View>
-        <View style={{flexDirection: "row"}}>
-          <TextInput  
-          placeholder = "Nhập thành phố" 
-          underlineColorAndroid = "transparent"
-          style={{flex: 2}}
-          onChangeText = {(TextInputText) => this.setState({ city: TextInputText })} />
-          <TouchableOpacity style={{flex: 1/3}} onPress={()=>this.getForecast()}>
-            <View style={{width:100, height: 50, backgroundColor: "grey"}}>
-              <Text>Tìm kiếm</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        
-        <Text style={styles.thanhpho}>Thành phố(Quận): {this.state.dataSource.city.name}</Text>
-        <Text style={styles.thanhpho}>Quốc gia: {this.state.dataSource.city.country}</Text>
-        <FlatList data={this.state.dataSource.list}
-          renderItem={({item})=>{
-            return(
-              <View>
-                <TouchableOpacity onPress={() => navigate('Weather', {key: item.dt_txt, city: this.state.city})}>
-                <View style={styles.flatList}>
-
-                  <View style={{
-                    flex: 2,
-                    flexDirection: "column",
-                  }}>
-                    <Text style={styles.flatListItem}>{item.dt_txt}</Text>
-                    <Text style={styles.flatListItem}>{item.weather[0].description}</Text>
-                  </View>
-                  <View style={{flex: 1/2,
-                    flexDirection: "column",}}>
-                    <Image
-                      style={styles.image}
-                      source={{uri: "http://openweathermap.org/img/wn/"+ item.weather[0].icon + "@2x.png"}}
-                    />
-                  </View>
-                  <View style={{
-                    flex: 2/3,
-                    flexDirection: "column",
-                  }}>
-                  <Text style={styles.flatListItem}>{`${item.main.temp_max}°C`}</Text>
-                    <Text style={styles.flatListItem}>{`${item.main.temp_min}°C`}</Text>
-                  </View>
-                </View>
-                </TouchableOpacity>
-                <View style={{height: 1, backgroundColor: 'white'}}>
-                </View>
-              </View>
-            )
-          }}
-          keyExtractor={item => item.dt_txt}
-        >
-          
-        </FlatList>
-      </View>
-    );
-  }
+							<Divider style={{ backgroundColor: '#dfe6e9', marginVertical:20}} />
+							
+							<View style={{flexDirection:'row', justifyContent:'space-between'}}>
+								<Text style={styles.notes}>{item.weather[0].description}</Text>
+								<Text style={styles.notes}>{Math.round( item.main.temp * 10) / 10 }&#8451;</Text>
+							</View>
+						</Card>
+					</TouchableOpacity>
+				);
+		}} />
+		</ImageBackground>
+		);
+	}
 }
 
-var styles = StyleSheet.create({
-  flatListItem: {
-    color: 'white',
-    padding: 10,
-    fontSize: 16,
-  },
-
-  flatList:{
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: 'mediumseagreen'
-  },
-  
-  image:{
-    width: 60, 
-    height: 60, 
-    marginTop: 10
-  },
-  thanhpho:{
-    padding: 10,
-    fontSize: 16,
-    backgroundColor: "tomato",
-    color: "white",
-  },
+const styles = StyleSheet.create({
+	card:{
+		backgroundColor:'rgba(56, 172, 236, 1)',
+		borderWidth:0,
+		borderRadius:0,
+	},
+	time:{
+		fontSize:30,
+		color:'#fff'
+	},
+	notes: {
+		fontSize: 18,
+		color:'#fff',
+		textTransform:'capitalize'
+	}
 });
