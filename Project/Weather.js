@@ -121,17 +121,39 @@ export default class App extends Component {
         </View>
       )
     }
-    else{
+    else
+    {
       var image = "";
-      if(weather.weather[0].icon === "01d" || weather.weather[0].icon === "02d" || weather.weather[0].icon === "03d" || weather.weather[0].icon === "04d"){
+      if(weather.weather[0].icon === "01d" || weather.weather[0].icon === "02d" || weather.weather[0].icon === "03d"){
         image = require('./img/day.jpg');
-      } else if(weather.weather[0].icon === "09d" || weather.weather[0].icon === "10d" || weather.weather[0].icon === "11d"){
+      } else if(weather.weather[0].icon === "09d" || weather.weather[0].icon === "10d"){
         image = require('./img/dayrain.jpg');
       }else if(weather.weather[0].icon === "01n" || weather.weather[0].icon === "02n" || weather.weather[0].icon === "03n" || weather.weather[0].icon === "04n"){
         image = require('./img/night.jpg');
-      }else if( weather.weather[0].icon === "09n" || weather.weather[0].icon === "10n" || weather.weather[0].icon === "11n"){
+      }else if( weather.weather[0].icon === "09n" || weather.weather[0].icon === "10n"){
         image = require('./img/nightrain.jpg');
       }
+      else if(weather.weather[0].icon === '50n')
+      {
+         image = require('./img/fog.jpg')
+      }
+      else if(weather.weather[0].icon === "04d")
+      {
+        image = require('./img/brokencloud.jpg')
+      }
+      else if(weather.weather[0].icon === "11d" || weather.weather[0].icon === "11n")
+      {
+        image = require('./img/nightthunder.jpg')
+      }
+      else if(weather.weather[0].icon === "13d" || weather.weather[0].icon === "13n")
+      {
+        image = require('./img/snow.jpg')
+      }
+    }
+
+
+
+
       const {navigate} = this.props.navigation;
       return (
         <ImageBackground source={image} style={{width: '100%', height: '100%'}}>
@@ -155,7 +177,6 @@ export default class App extends Component {
               <TouchableOpacity onPress={()=>this.showDialog()}>
                 <Image source={require('./img/checked.png')} style={styles.button}></Image>
               </TouchableOpacity>
-
             </View>
               <View style={styles.info_basic_today}>
         
@@ -163,7 +184,7 @@ export default class App extends Component {
                   <Text style={styles.temp_now}>{parseInt(weather.main.temp,10)}°C</Text>
                   <Image source={{uri: "http://openweathermap.org/img/wn/"+ weather.weather[0].icon + "@2x.png"}} style={styles.icon_temp_now}></Image>
                 </View>
-                <Text style={styles.info_temp}>{}</Text>
+
                 <View style={styles.rowbasic_2}>
                   <Text style={styles.info_temp}>{weather.weather[0].description}</Text>
                   
@@ -210,10 +231,11 @@ export default class App extends Component {
                 </View>
               </View>
             </View>
-            <Button
-              title="Các ngày tiếp theo"
-              onPress={() => navigate('Forecast', {city: this.state.city, icon: weather.weather[0].icon})}
-            />
+            <TouchableOpacity
+              style={styles.buttonNext}
+              onPress={() => navigate('Forecast', {city: this.state.city, icon: weather.weather[0].icon})}>
+              <Text style={styles.textNext}>Các ngày tiếp theo</Text>
+            </TouchableOpacity>
             <Dialog.Container visible={this.state.dialogVisible}>
               <Dialog.Title>Lưu thành phố</Dialog.Title>
               <Dialog.Input 
