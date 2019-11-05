@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
   Text,
   View,
   Image,
@@ -51,18 +50,34 @@ export default class Weather extends Component {
     var image;
     for(let i = 0; i < weather.length; i++){
       if(this.props.navigation.getParam('key') === weather[i].dt_txt){
-        if(weather[i].weather[0].icon === "01d" || weather[i].weather[0].icon === "02d" || weather[i].weather[0].icon === "03d" || weather[i].weather[0].icon === "04d"){
+        if(weather[i].weather[0].icon === "01d" || weather[i].weather[0].icon === "02d" || weather[i].weather[0].icon === "03d"){
           image = require('./img/day.jpg');
-        } else if(weather[i].weather[0].icon === "09d" || weather[i].weather[0].icon === "10d" || weather[i].weather[0].icon === "11d"){
+        } else if(weather[i].weather[0].icon === "09d" || weather[i].weather[0].icon === "10d"){
           image = require('./img/dayrain.jpg');
         }else if(weather[i].weather[0].icon === "01n" || weather[i].weather[0].icon === "02n" || weather[i].weather[0].icon === "03n" || weather[i].weather[0].icon === "04n"){
           image = require('./img/night.jpg');
-        }else if( weather[i].weather[0].icon === "09n" || weather[i].weather[0].icon === "10n" || weather[i].weather[0].icon === "11n"){
+        }else if( weather[i].weather[0].icon === "09n" || weather[i].weather[0].icon === "10n"){
           image = require('./img/nightrain.jpg');
         }
+        else if(weather[i].weather[0].icon === '50n')
+        {
+           image = require('./img/fog.jpg')
+        }
+        else if(weather[i].weather[0].icon === "04d")
+        {
+          image = require('./img/brokencloud.jpg')
+        }
+        else if(weather[i].weather[0].icon === "11d" || weather[i].weather[0].icon === "11n")
+        {
+          image = require('./img/nightthunder.jpg')
+        }
+        else if(weather[i].weather[0].icon === "13d" || weather[i].weather[0].icon === "13n")
+        {
+          image = require('./img/snow.jpg')
+        }
         return (
-            <ImageBackground source={image} style={{width: '100%', height: '100%'}}>
-            <View style={styles.info_basic_today}>
+            <ImageBackground source={image} style={{flex: 1}}>
+            <View style={styles.forecastInfo}>
   
               <View style={styles.rowbasic_1}>
                 <Text style={styles.temp_now}>{parseInt(weather[i].main.temp, 10)}°C</Text>
@@ -76,9 +91,9 @@ export default class Weather extends Component {
                 <Text style={styles.info_temp}>{weather[i].weather[0].description}</Text>
                 <View style={styles.rowbasic_2_1}>
                   <Image source={require('./img/up-arrow.png')} style={{width: 10, height: 14, marginTop: 3}}></Image>
-                  <Text style={styles.temp_low_high}>  {weather[i].main.temp_max}°C     </Text>
+                  <Text style={styles.temp_low_high}>  {parseInt(weather[i].main.temp_max,10)}°C     </Text>
                   <Image source={require('./img/down-arrow.png')} style={{width: 10, height: 14, marginTop: 3}}></Image>
-                  <Text style={styles.temp_low_high}>  {weather[i].main.temp_min}°C</Text>
+                  <Text style={styles.temp_low_high}>  {parseInt(weather[i].main.temp_min,10)}°C</Text>
                 </View>
               </View>
             </View>
