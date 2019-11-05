@@ -46,20 +46,38 @@ export default class Forecast extends Component {
 		  }
 
 		var image = "";
-		if(this.props.navigation.getParam('icon') === "01d" || this.props.navigation.getParam('icon') === "02d" || this.props.navigation.getParam('icon') === "03d" || this.props.navigation.getParam('icon') === "04d"){
+		if(this.props.navigation.getParam('icon') === "01d" || this.props.navigation.getParam('icon') === "02d" || this.props.navigation.getParam('icon') === "03d"){
 			image = require('./img/day.jpg');
-		} else if(this.props.navigation.getParam('icon') === "09d" || this.props.navigation.getParam('icon') === "10d" || this.props.navigation.getParam('icon') === "11d"){
+		  } else if(this.props.navigation.getParam('icon') === "09d" || this.props.navigation.getParam('icon') === "10d"){
 			image = require('./img/dayrain.jpg');
-		}else if(this.props.navigation.getParam('icon') === "01n" || this.props.navigation.getParam('icon') === "02n" || this.props.navigation.getParam('icon') === "03n" || this.props.navigation.getParam('icon') === "04n"){
+		  }else if(this.props.navigation.getParam('icon') === "01n" || this.props.navigation.getParam('icon') === "02n" || this.props.navigation.getParam('icon') === "03n" || this.props.navigation.getParam('icon') === "04n"){
 			image = require('./img/night.jpg');
-		}else if( this.props.navigation.getParam('icon') === "09n" || this.props.navigation.getParam('icon') === "10n" || this.props.navigation.getParam('icon') === "11n"){
+		  }else if( this.props.navigation.getParam('icon') === "09n" || this.props.navigation.getParam('icon') === "10n"){
 			image = require('./img/nightrain.jpg');
-		}
+		  }
+		  else if(this.props.navigation.getParam('icon') === '50n')
+		  {
+			 image = require('./img/fog.jpg')
+		  }
+		  else if(this.props.navigation.getParam('icon') === "04d")
+		  {
+			image = require('./img/brokencloud.jpg')
+		  }
+		  else if(this.props.navigation.getParam('icon') === "11d" || this.props.navigation.getParam('icon') === "11n")
+		  {
+			image = require('./img/nightthunder.jpg')
+		  }
+		  else if(this.props.navigation.getParam('icon') === "13d" || this.props.navigation.getParam('icon') === "13n")
+		  {
+			image = require('./img/snow.jpg')
+		  }
+
+
 		return (
 			<ImageBackground source={image} style={{width: '100%', height: '100%'}}>
       	<FlatList 
 			data={this.state.dataSource.list} 
-			style={{marginTop:20}} 
+			style={{marginTop:50}}
 			keyExtractor={item => item.dt_txt} 
 			renderItem={({item}) => {
 				return(
@@ -93,9 +111,9 @@ export default class Forecast extends Component {
 
 const styles = StyleSheet.create({
 	card:{
-		backgroundColor:'rgba(56, 172, 236, 1)',
-		borderWidth:0,
+		backgroundColor:'rgba(52, 52, 52, 0.4)',
 		borderRadius:3,
+		borderColor: 'rgba(52, 52, 52, 0.4)',
 	},
 	time:{
 		fontSize:30,
