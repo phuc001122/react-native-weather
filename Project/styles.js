@@ -9,7 +9,11 @@ const styles = StyleSheet.create({
     slide2: {
       flex: 1,
     },
-    
+    notfound:
+    {
+      backgroundColor: 'gray',
+    },
+
     head:
     {
       flexDirection: "row",
@@ -57,8 +61,9 @@ const styles = StyleSheet.create({
   
     icon_temp_now:
     {
-      width: 100,
-      height: 90,
+      marginTop: 20,
+      width: '50%',
+      height: '80%',
       flexDirection: "row-reverse",
       
     },
@@ -140,6 +145,41 @@ const styles = StyleSheet.create({
       paddingBottom: 10
     },
 
+    buttonNext:
+    {
+      marginTop: 15,
+      height: 40,
+      backgroundColor: 'rgba(52, 52, 52, 0.4)',
+      justifyContent: "center",
+      alignItems: "center",
+      width: '90%',
+      marginLeft: 15,
+      borderRadius: 10
+    },
+
+    textNext:
+    {
+      color: 'gray',
+      fontSize: 18,
+    },
+
+
+
+
+    //forecast info
+    forecastInfo:
+    {
+      paddingLeft: 20,
+      paddingRight: 20,
+      marginLeft: 15,
+      marginTop: 80,
+      marginBottom: 20,
+      width: '90%',
+      alignSelf: "baseline",
+      backgroundColor: 'rgba(52, 52, 52, 0.4)',
+      borderRadius: 10
+    },
+
 
 
 
@@ -166,6 +206,11 @@ const styles = StyleSheet.create({
       fontSize: 16,
       backgroundColor: "gray",
       color: "white",
+    },
+    card:
+    {
+      backgroundColor: 'rgba(52, 52, 52, 0.4)',
+      borderRadius: 5
     },
   })
 
