@@ -5,14 +5,46 @@ import Forecast from './Forecast';
 import ForecastInfo from './ForecastInfo';
 
 const MainNavigator = createStackNavigator({
-  Weather: {
+  Weather:
+  {
     screen: Weather,
-    navigationOptions: {
+    navigationOptions:
+    {
       header: null,
     },
   },
-  Forecast: {screen: Forecast,},
-  Info: {screen: ForecastInfo},
+
+  Forecast:
+  {
+    screen: Forecast,
+    navigationOptions:
+    {
+      title: 'Dự báo thời tiết',
+
+      headerTintColor: 'white',
+      headerTitleStyle:
+      {
+        color: 'white',
+      },
+      headerTransparent: true
+    },
+  },
+
+  Info:
+  {
+    screen: ForecastInfo,
+    navigationOptions:
+    {
+      title: 'Chi tiết',
+
+      headerTintColor: 'white',
+      headerTitleStyle:
+      {
+        color: 'white',
+      },
+      headerTransparent: true
+    },
+  },
 });
 
 const App = createAppContainer(MainNavigator);
