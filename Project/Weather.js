@@ -104,6 +104,7 @@ export default class App extends Component {
     if(weather.message === "city not found"){
       return(
         <View>
+          <View style={styles.head}>
           <TextInput 
               placeholder={'Nhập thành phố...'} 
               style={styles.input}
@@ -117,7 +118,24 @@ export default class App extends Component {
                 } 
             }}
             >{weather.name}</TextInput>
-          <Text>Không tìm thấy thành phố</Text>
+            <TouchableOpacity onPress={()=>this.showDialog()}>
+                <Image source={require('./img/checked.png')} style={styles.button}></Image>
+            </TouchableOpacity>
+          </View>
+          
+          <Text style={{justifyContent: "center", textAlign: "center"}}>Không tìm thấy thành phố</Text>
+          <Dialog.Container visible={this.state.dialogVisible}>
+              <Dialog.Title>Lưu thành phố</Dialog.Title>
+              <Dialog.Input 
+                label="Nhập tên thành phố:"
+                onChangeText={savedCity => this.setState({savedCity})}
+                value={this.state.savedCity}
+                >
+
+                </Dialog.Input>
+              <Dialog.Button label="Lưu" onPress={this._storeData} />
+              <Dialog.Button label="Hủy" onPress={this.handleCancel} />
+            </Dialog.Container>
         </View>
       )
     }
@@ -253,5 +271,3 @@ export default class App extends Component {
       );
     }
   }
-}
- 
